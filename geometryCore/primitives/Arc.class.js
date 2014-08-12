@@ -74,7 +74,7 @@ define(function(require, exports, module) {
 				get: function () {
 					var angle,
 						length;
-					angle = this.startAngle - this.startAngle;
+					angle = this.endAngle - this.startAngle;
 					length = Math.abs(Math.PI * this.radius * angle / 180);
 					return length;
 				}
