@@ -78,24 +78,6 @@ define(function(require, exports, module) {
 					length = Math.abs(Math.PI * this.radius * angle / 180);
 					return length;
 				}
-			},
-			//todo: check following algorithms for max/min coordinates how to define max value of function on[a,b]
-			maxX: {
-				configurable: false,
-				enumerable: true,
-				get: function () {//todo: radians!!!
-					var arcAngleHalf = this.startAngle + (this.endAngle - this.startAngle) / 2;
-					var middleCoordinateOfArc = this.radius * Math.cos ((this.startAngle + (this.endAngle - this.startAngle) / 2 ) * (Math.PI/180)) + this.rx;
-					return Math.max(this.x1, this.x2, middleCoordinateOfArc);
-				}
-			},
-			maxY: {
-				configurable: false,
-				enumerable: true,
-				get: function () {
-					var middleCoordinateOfArc = this.radius * Math.sin ((this.startAngle + (this.endAngle - this.startAngle) / 2 ) * (Math.PI/180)) + this.ry;
-					return Math.max(this.y1, this.y2, middleCoordinateOfArc);
-				}
 			}
 		});
 	}
