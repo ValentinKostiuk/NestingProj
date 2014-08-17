@@ -7,7 +7,7 @@ define(function(require, exports, module){
 	var logger = require('Logger');
 
 	exports.getRadians = function getRadians(angle){
-		return angle * (Math.PI/180);
+		return angle * Math.PI / 180;
 	};
 
 	logger.info(module.id, 'Loaded');

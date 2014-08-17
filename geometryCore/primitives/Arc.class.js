@@ -1,88 +1,117 @@
 /**
  * Created by Valentin.Kostyuk on 07.04.14.
  */
-define(function(require, exports, module) {
+define (function (require, exports, module) {
 	'use strict';
 
-	var geomUtils = require('GeometryUtils'),
-		logger = require('Logger');
+	var geomUtils = require ('GeometryUtils'),
+		logger = require ('Logger');
 
 	function Arc (data) {
-		Object.defineProperties(this, {
-			rx:{
+
+		if(data.startAngle === data.endAngle){
+			logger.error(module.id, data, 'wrong Arc parameters! start & end angles can\'t be equal');
+			return;
+		}
+		if(data.startAngle < 0 || data.endAngle < 0){
+			logger.error(module.id, data, 'wrong Arc parameters! angles can\'t be negative');
+			return;
+		}
+		if(data.radius <= 0){
+			logger.error(module.id, data, 'wrong Arc parameters! radius can\'t be negative or equal zero');
+			return;
+		}
+
+		var self = this,
+			primitiveHelpers = {};
+
+		Object.defineProperties (this, {
+			rx: {
 				value: data.rx,
 				writable: true,
 				enumerable: true,
 				configurable: false
 			},
-			ry:{
+			ry: {
 				value: data.ry,
 				writable: true,
 				enumerable: true,
 				configurable: false
 			},
-			radius:{
+			radius: {
 				value: data.radius,
 				writable: true,
 				enumerable: true,
 				configurable: false
 			},
 			//todo: maybe define function for normalization of angles where startA > endA that mean through PI
-			startAngle:{
+			startAngle: {
 				value: data.startAngle,
 				writable: true,
 				enumerable: true,
 				configurable: false
 			},
-			endAngle:{
+			endAngle: {
 				value: data.endAngle,
 				writable: true,
 				enumerable: true,
 				configurable: false
 			},
-			x1:{
+			x1: {
 				configurable: false,
 				enumerable: true,
 				get: function () {
-					return this.radius * Math.cos (this.startAngle * (Math.PI/180)) + this.rx;
+					return this.radius * Math.cos (geomUtils.getRadians(this.startAngle)) + this.rx;
 				}
 			},
-			y1:{
+			y1: {
 				configurable: false,
 				enumerable: true,
 				get: function () {
-					return this.radius * Math.sin (this.startAngle * (Math.PI/180)) + this.ry;
+					return this.radius * Math.sin (geomUtils.getRadians(this.startAngle)) + this.ry;
 				}
 			},
-			x2:{
+			x2: {
 				configurable: false,
 				enumerable: true,
 				get: function () {
-					return this.radius * Math.cos (this.endAngle * (Math.PI/180)) + this.rx;
+					return this.radius * Math.cos (geomUtils.getRadians(this.endAngle)) + this.rx;
 				}
 			},
-			y2:{
+			y2: {
 				configurable: false,
 				enumerable: true,
 				get: function () {
-					return this.radius * Math.sin (this.endAngle * (Math.PI/180)) + this.ry;
+					return this.radius * Math.sin (geomUtils.getRadians(this.endAngle)) + this.ry;
 				}
 			},
-			length:{
+			length: {
 				configurable: false,
 				enumerable: true,
 				get: function () {
 					var angle,
 						length;
 					angle = this.endAngle - this.startAngle;
-					length = Math.abs(Math.PI * this.radius * angle / 180);
+					length = Math.abs (geomUtils.getRadians(angle) * this.radius);
 					return length;
+				}
+			},
+			largeArcFlag: {
+				configurable: false,
+				enumerable: true,
+				get: function () {
+					var angle = this.endAngle - this.startAngle;
+					return angle >= 180 || this.endAngle < this.startAngle ? 1 : 0;
 				}
 			}
 		});
+
+		primitiveHelpers.getArcSplittedByQuadrant = function () {
+
+		};
 	}
 
 	exports.Arc = Arc;
 
-	logger.info(module.id, 'loaded');
+	logger.info (module.id, 'loaded');
 });
