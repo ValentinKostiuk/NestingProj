@@ -9,16 +9,16 @@ define (function (require, exports, module) {
 
 	function Arc (data) {
 
-		if(data.startAngle === data.endAngle){
-			logger.error(module.id, data, 'wrong Arc parameters! start & end angles can\'t be equal');
+		if (data.startAngle === data.endAngle) {
+			logger.error (module.id, data, 'wrong Arc parameters! start & end angles can\'t be equal');
 			return;
 		}
-		if(data.startAngle < 0 || data.endAngle < 0){
-			logger.error(module.id, data, 'wrong Arc parameters! angles can\'t be negative');
+		if (data.startAngle < 0 || data.endAngle < 0) {
+			logger.error (module.id, data, 'wrong Arc parameters! angles can\'t be negative');
 			return;
 		}
-		if(data.radius <= 0){
-			logger.error(module.id, data, 'wrong Arc parameters! radius can\'t be negative or equal zero');
+		if (data.radius <= 0) {
+			logger.error (module.id, data, 'wrong Arc parameters! radius can\'t be negative or equal zero');
 			return;
 		}
 
@@ -44,7 +44,6 @@ define (function (require, exports, module) {
 				enumerable: true,
 				configurable: false
 			},
-			//todo: maybe define function for normalization of angles where startA > endA that mean through PI
 			startAngle: {
 				value: data.startAngle,
 				writable: true,
@@ -61,48 +60,56 @@ define (function (require, exports, module) {
 				configurable: false,
 				enumerable: true,
 				get: function () {
-					return this.radius * Math.cos (geomUtils.getRadians(this.startAngle)) + this.rx;
+					return this.radius * Math.cos (geomUtils.getRadians (this.startAngle)) + this.rx;
 				}
 			},
 			y1: {
 				configurable: false,
 				enumerable: true,
 				get: function () {
-					return this.radius * Math.sin (geomUtils.getRadians(this.startAngle)) + this.ry;
+					return this.radius * Math.sin (geomUtils.getRadians (this.startAngle)) + this.ry;
 				}
 			},
 			x2: {
 				configurable: false,
 				enumerable: true,
 				get: function () {
-					return this.radius * Math.cos (geomUtils.getRadians(this.endAngle)) + this.rx;
+					return this.radius * Math.cos (geomUtils.getRadians (this.endAngle)) + this.rx;
 				}
 			},
 			y2: {
 				configurable: false,
 				enumerable: true,
 				get: function () {
-					return this.radius * Math.sin (geomUtils.getRadians(this.endAngle)) + this.ry;
+					return this.radius * Math.sin (geomUtils.getRadians (this.endAngle)) + this.ry;
 				}
 			},
 			length: {
-				configurable: false,
-				enumerable: true,
-				get: function () {
+				value: (function () {
 					var angle,
 						length;
 					angle = this.endAngle - this.startAngle;
-					length = Math.abs (geomUtils.getRadians(angle) * this.radius);
+					length = Math.abs (geomUtils.getRadians (angle) * this.radius);
 					return length;
-				}
-			},
-			largeArcFlag: {
+				}) (),
 				configurable: false,
 				enumerable: true,
-				get: function () {
+				writable: false
+			},
+			largeArcFlag: {
+				value: (function () {
 					var angle = this.endAngle - this.startAngle;
 					return angle >= 180 || this.endAngle < this.startAngle ? 1 : 0;
-				}
+				}) (),
+				configurable: false,
+				enumerable: true,
+				writable: false
+			},
+			sweepFlag: {
+				value: 1,
+				configurable: false,
+				enumerable: true,
+				writable: false
 			}
 		});
 
@@ -110,6 +117,22 @@ define (function (require, exports, module) {
 
 		};
 	}
+
+	Arc.prototype._normalizeAngles = function () {
+		var normalizationAngle, normalizer;
+		if (this.startAngle > 360 || this.endAngle > 360) {
+			normalizationAngle = Math.max (this.startAngle, this.endAngle);
+			normalizer = parseInt (normalizationAngle / 360) * 360;
+			this.startAngle -= normalizer;
+			this.endAngle -= normalizer;
+		}
+		if (this.startAngle < 0 || this.endAngle < 0) {
+			normalizationAngle = Math.min (this.startAngle, this.endAngle);
+			normalizer = parseInt ((0 - normalizationAngle) / 360) * 360 + 360;
+			this.startAngle += normalizer;
+			this.endAngle += normalizer;
+		}
+	};
 
 	exports.Arc = Arc;
 
