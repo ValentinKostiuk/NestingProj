@@ -7,13 +7,18 @@ define(function(require, exports, module) {
 	var logger = require('Logger');
 
 	exports.getClassOf = function (o){
-		if(o === null) {
+		var className;
+		if(o === null) {//todo: rewrite through prototype constructor Name for self created classes
 			return 'Null';
 		}
 		if(o === undefined) {
 			return 'Undefined';
 		}
-		return Object.prototype.toString.call(0).slice(8, -1);
+		className = Object.prototype.toString.call(o).slice(8, -1);
+		if(className === 'Object'){
+			return o.constructor.name;
+		}
+		return className;
 	};
 
 	logger.info(module.id, 'Loaded');
