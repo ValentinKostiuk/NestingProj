@@ -8,7 +8,7 @@ define(function(require, exports, module) {
 
 	exports.getClassOf = function (o){
 		var className;
-		if(o === null) {//todo: rewrite through prototype constructor Name for self created classes
+		if(o === null) {
 			return 'Null';
 		}
 		if(o === undefined) {
