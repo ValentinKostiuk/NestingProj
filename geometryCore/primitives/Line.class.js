@@ -62,15 +62,14 @@ define (function (require, exports, module) {
 				}
 			},
 			length: {
-				value: (function () {
+				get: function () {
 					return Math.sqrt (Math.pow ((this.x2 - this.x1), 2) + Math.pow ((this.y2 - this.y1), 2));
-				}) (),
+				},
 				configurable: false,
-				enumerable: true,
-				writable: false
+				enumerable: true
 			},
 			integral: {
-				value: (function () {
+				get: function () {
 					var integral,
 						integral_x,
 						integral_y;
@@ -78,10 +77,9 @@ define (function (require, exports, module) {
 					integral_y = (this.x1 - this.x2) * (this.y1 + this.y2) / 2 + (this.y2 * this.x1 - this.y1 * this.x2);
 					integral = integral_x + integral_y;
 					return integral;
-				}) (),
+				},
 				configurable: false,
-				enumerable: true,
-				writable: false
+				enumerable: true
 			}
 		});
 	}

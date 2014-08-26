@@ -4,7 +4,7 @@
 define (function (require, exports, module) {
 	'use strict';
 
-	var geomUtils = require ('GeometryUtils'),
+	var geomUtils = require ('geometryUtils'),
 		logger = require ('Logger');
 
 	function Arc (data) {
@@ -22,8 +22,69 @@ define (function (require, exports, module) {
 			return;
 		}
 
-		var self = this,
-			primitiveHelpers = {};
+		var self = this;
+
+		function getArcSplittedByQuadrant () {
+
+			self._normalizeAngles ();
+
+			var start = self.startAngle,
+				end = self.endAngle,
+				startQuadrant,
+				endQuadrant,
+				splittedArc = [ [], [], [], [] ];
+
+			function defineQuadrant (angle) {
+				if (angle >= 0 && angle < 90) {
+					return {
+						number: 0,
+						ageAngle: 90,
+						nextAngle: 90
+					};
+				}
+				if (angle >= 90 && angle < 180) {
+					return {
+						number: 1,
+						ageAngle: 180,
+						nextAngle: 180
+					};
+				}
+				if (angle >= 180 && angle < 270) {
+					return {
+						number: 2,
+						ageAngle: 270,
+						nextAngle: 270
+					};
+				}
+				if (angle >= 270 && angle < 360) {
+					return {
+						number: 3,
+						ageAngle: 360,
+						nextAngle: 0
+					};
+				}
+			}
+
+			while (start !== end) {
+				startQuadrant = defineQuadrant (start);
+				endQuadrant = defineQuadrant (end);
+
+				if (startQuadrant.number < endQuadrant.number || start > end) {
+					splittedArc[startQuadrant.number].push ({
+						start: start,
+						end: startQuadrant.ageAngle
+					});
+					start = startQuadrant.nextAngle;
+				} else if (startQuadrant.number === endQuadrant.number) {
+					splittedArc[startQuadrant.number].push ({
+						start: start,
+						end: end
+					});
+					start = end;
+				}
+			}
+			return splittedArc;
+		}
 
 		Object.defineProperties (this, {
 			rx: {
@@ -85,37 +146,36 @@ define (function (require, exports, module) {
 				}
 			},
 			length: {
-				value: (function () {
+				get: function () {
 					var angle,
 						length;
 					angle = this.endAngle - this.startAngle;
 					length = Math.abs (geomUtils.getRadians (angle) * this.radius);
 					return length;
-				}) (),
+				},
 				configurable: false,
-				enumerable: true,
-				writable: false
+				enumerable: true
 			},
 			largeArcFlag: {
-				value: (function () {
+				get: function () {
 					var angle = this.endAngle - this.startAngle;
 					return angle >= 180 || this.endAngle < this.startAngle ? 1 : 0;
-				}) (),
+				},
 				configurable: false,
-				enumerable: true,
-				writable: false
+				enumerable: true
 			},
 			sweepFlag: {
 				value: 1,
 				configurable: false,
 				enumerable: true,
 				writable: false
+			},
+			arcSplittedByQuadrants: {
+				get: getArcSplittedByQuadrant,
+				configurable: false,
+				enumerable: true
 			}
 		});
-
-		primitiveHelpers.getArcSplittedByQuadrant = function () {
-
-		};
 	}
 
 	Arc.prototype._normalizeAngles = function () {
