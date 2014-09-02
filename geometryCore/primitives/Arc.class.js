@@ -25,7 +25,7 @@ define (function (require, exports, module) {
 		var self = this;
 
 		function getArcSplittedByQuadrant () {
-
+			//implement caching !!!!by hash of start end rx ry radius
 			self._normalizeAngles ();
 
 			var start = self.startAngle,
@@ -85,6 +85,12 @@ define (function (require, exports, module) {
 			}
 			return splittedArc;
 		}
+		function getXCoordinate(radius, xCenterCoordinate, angle){
+			return radius * Math.cos (geomUtils.getRadians (angle)) + xCenterCoordinate;
+		}
+		function getYCoordinate(radius, yCenterCoordinate, angle){
+			return radius * Math.sin (geomUtils.getRadians (angle)) + yCenterCoordinate;
+		}
 
 		Object.defineProperties (this, {
 			rx: {
@@ -143,6 +149,42 @@ define (function (require, exports, module) {
 				enumerable: true,
 				get: function () {
 					return this.radius * Math.sin (geomUtils.getRadians (this.endAngle)) + this.ry;
+				}
+			},
+			maxX: {
+				configurable: false,
+				enumerable: true,
+				get: function () {
+					var allXCoordinates = [],
+						quadrantArcs = getArcSplittedByQuadrant (),
+						i, j;
+					for (i = 0; i < quadrantArcs.length; i += 1) {
+						if (quadrantArcs[i].length > 0) {
+							for (j = 0; j < quadrantArcs[i].length; j += 1) {
+								allXCoordinates.push (getXCoordinate (this.radius, this.rx, quadrantArcs[i][j].start));
+								allXCoordinates.push (getXCoordinate (this.radius, this.rx, quadrantArcs[i][j].end));
+							}
+						}
+					}
+					return Math.max.apply (Math, allXCoordinates);
+				}
+			},
+			maxY: {
+				configurable: false,
+				enumerable: true,
+				get: function () {
+					var allYCoordinates = [],
+						quadrantArcs = getArcSplittedByQuadrant (),
+						i, j;
+					for (i = 0; i < quadrantArcs.length; i += 1) {
+						if (quadrantArcs[i].length > 0) {
+							for (j = 0; j < quadrantArcs[i].length; j += 1) {
+								allYCoordinates.push (getYCoordinate (this.radius, this.ry, quadrantArcs[i][j].start));
+								allYCoordinates.push (getYCoordinate (this.radius, this.ry, quadrantArcs[i][j].end));
+							}
+						}
+					}
+					return Math.max.apply (Math, allYCoordinates);
 				}
 			},
 			length: {
