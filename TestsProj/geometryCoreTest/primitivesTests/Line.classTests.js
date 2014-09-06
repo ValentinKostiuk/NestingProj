@@ -9,7 +9,7 @@ define (function (require, exports, module) {
 
 		it ('should move', function () {
 
-			// arrange
+			// arrange3
 			var line = new Line ({ x1: 0, x2: 2, y1: 0, y2: 2 });
 
 			// act
