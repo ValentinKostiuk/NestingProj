@@ -83,6 +83,17 @@ define (function (require, exports, module) {
 				expect(line.x2).toBe(14);
 				expect(line.y2).toBe(14);
 			});
+			it('should rotate line', function(){
+				//arrange
+				//act
+				line.rotateAround(0, 0, 150);
+				//assert
+				expect(line.x1).toBeCloseTo(-2.732051, 6);
+				expect(line.y1).toBeCloseTo(-0.732051, 6);
+				expect(line.x2).toBeCloseTo(-5.464102, 6);
+				expect(line.y2).toBeCloseTo(-1.464102, 6);
+				expect(line.directionAngle).toBe(195);
+			});
 		});
 	});
 
