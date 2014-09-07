@@ -52,6 +52,20 @@ define (function (require, exports, module) {
 				// assert
 				expect (line.length).toBeCloseTo(8.062258, 6);
 			});
+
+			it('should correctly calculate direction angle of line', function(){
+				// arrange
+				var line = new Line ({ x1: 0, x2: 2, y1: 0, y2: 2 });
+				// assert
+				expect (line.directionAngle).toBeCloseTo(45, 6);
+			});
+
+			it('should correctly calculate direction angle of line', function(){
+				// arrange
+				var line = new Line ({ x1: 1, x2: 2, y1: 0, y2: 8 });
+				// assert
+				expect (line.directionAngle).toBeCloseTo(82.874984, 6);
+			});
 		});
 	});
 

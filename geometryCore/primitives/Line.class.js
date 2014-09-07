@@ -80,6 +80,14 @@ define (function (require, exports, module) {
 				},
 				configurable: false,
 				enumerable: true
+			},
+			directionAngle: {
+				get: function () {
+					var radians = Math.atan2(this.y2 - this.y1, this.x2 - this.x1);
+					return radians * 180 / Math.PI;
+				},
+				configurable: false,
+				enumerable: true
 			}
 		});
 	}
