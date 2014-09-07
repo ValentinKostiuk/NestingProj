@@ -67,6 +67,23 @@ define (function (require, exports, module) {
 				expect (line.directionAngle).toBeCloseTo(82.874984, 6);
 			});
 		});
+
+		describe('Line usage', function(){
+			var line;
+			beforeEach(function(){
+				line = new Line({x1: 2, y1: 2, x2: 4, y2: 4});
+			});
+			it('should move line', function(){
+				//arrange
+				//act
+				line.move(10, 10);
+				//assert
+				expect(line.x1).toBe(12);
+				expect(line.y1).toBe(12);
+				expect(line.x2).toBe(14);
+				expect(line.y2).toBe(14);
+			});
+		});
 	});
 
 });
