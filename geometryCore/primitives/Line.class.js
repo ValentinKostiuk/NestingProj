@@ -107,7 +107,6 @@ define (function (require, exports, module) {
 							angle = 180;
 						}
 					}
-
 					return angle;
 				},
 				configurable: false,
