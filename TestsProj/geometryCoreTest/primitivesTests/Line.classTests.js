@@ -53,18 +53,117 @@ define (function (require, exports, module) {
 				expect (line.length).toBeCloseTo(8.062258, 6);
 			});
 
-			it('should correctly calculate direction angle of line', function(){
+			it('{x1: 0, y1: 0, x2: 2, y2: 0} angle should be 0', function(){
 				// arrange
-				var line = new Line ({ x1: 0, x2: 2, y1: 0, y2: 2 });
+				var line = new Line ({x1: 0, y1: 0, x2: 2, y2: 0});
+				// assert
+				expect (line.directionAngle).toBeCloseTo(0, 6);
+			});
+
+			it('{x1: 0, y1: 0, x2: 0, y2: 2} angle should be 90', function(){
+				// arrange
+				var line = new Line ({x1: 0, y1: 0, x2: 0, y2: 2});
+				// assert
+				expect (line.directionAngle).toBeCloseTo(90, 6);
+			});
+
+			it('{x1: 0, y1: 0, x2: 0, y2: -2} angle should be 270', function(){
+				// arrange
+				var line = new Line ({x1: 0, y1: 0, x2: 0, y2: -2});
+				// assert
+				expect (line.directionAngle).toBeCloseTo(270, 6);
+			});
+
+			it('{x1: 0, y1: 0, x2: -2, y2: 0} angle should be 180', function(){
+				// arrange
+				var line = new Line ({x1: 0, y1: 0, x2: -2, y2: 0});
+				// assert
+				expect (line.directionAngle).toBeCloseTo(180, 6);
+			});
+
+			it('{x1: 0, y1: 0, x2: 2, y2: 2} angle should be 45', function(){
+				// arrange
+				var line = new Line ({x1: 0, y1: 0, x2: 2, y2: 2});
 				// assert
 				expect (line.directionAngle).toBeCloseTo(45, 6);
 			});
 
-			it('should correctly calculate direction angle of line', function(){
+			it('{x1: 0, y1: 0, x2: -2, y2: 2} angle should be 135', function(){
 				// arrange
-				var line = new Line ({ x1: 1, x2: 2, y1: 0, y2: 8 });
+				var line = new Line ({x1: 0, y1: 0, x2: -2, y2: 2});
 				// assert
-				expect (line.directionAngle).toBeCloseTo(82.874984, 6);
+				expect (line.directionAngle).toBeCloseTo(135, 6);
+			});
+
+			it('{x1: 0, y1: 0, x2: -2, y2: -2} angle should be 225', function(){
+				// arrange
+				var line = new Line ({x1: 0, y1: 0, x2: -2, y2: -2});
+				// assert
+				expect (line.directionAngle).toBeCloseTo(225, 6);
+			});
+
+			it('{x1: 0, y1: 0, x2: 2, y2: -2} angle should be 315', function(){
+				// arrange
+				var line = new Line ({x1: 0, y1: 0, x2: 2, y2: -2});
+				// assert
+				expect (line.directionAngle).toBeCloseTo(315, 6);
+			});
+
+
+			it('{x1: 2, y1: 0, x2: 0, y2: 0} angle should be 180', function(){
+				// arrange
+				var line = new Line ({x1: 2, y1: 0, x2: 0, y2: 0});
+				// assert
+				expect (line.directionAngle).toBeCloseTo(180, 6);
+			});
+
+			it('{x1: 0, y1: 2, x2: 0, y2: 0} angle should be 270', function(){
+				// arrange
+				var line = new Line ({x1: 0, y1: 2, x2: 0, y2: 0});
+				// assert
+				expect (line.directionAngle).toBeCloseTo(270, 6);
+			});
+
+			it('{x1: 0, y1: -2, x2: 0, y2: 0} angle should be 90', function(){
+				// arrange
+				var line = new Line ({x1: 0, y1: -2, x2: 0, y2: 0});
+				// assert
+				expect (line.directionAngle).toBeCloseTo(90, 6);
+			});
+
+			it('{x1: -2, y1: 0, x2: 0, y2: 0} angle should be 0', function(){
+				// arrange
+				var line = new Line ({x1: -2, y1: 0, x2: 0, y2: 0});
+				// assert
+				expect (line.directionAngle).toBeCloseTo(0, 6);
+			});
+
+			it('{x1: 2, y1: 2, x2: 0, y2: 0} angle should be 225', function(){
+				// arrange
+				var line = new Line ({x1: 2, y1: 2, x2: 0, y2: 0});
+				// assert
+				expect (line.directionAngle).toBeCloseTo(225, 6);
+			});
+
+			it('{x1: -2, y1: 2, x2: 0, y2: 0} angle should be 315', function(){
+				// arrange
+				var line = new Line ({x1: -2, y1: 2, x2: 0, y2: 0});
+				// assert
+				expect (line.directionAngle).toBeCloseTo(315, 6);
+			});
+
+			it('{x1: -2, y1: -2, x2: 0, y2: 0} angle should be 45', function(){
+				// arrange
+				var line = new Line ({x1: -2, y1: -2, x2: 0, y2: 0});
+				// assert
+				expect (line.directionAngle).toBeCloseTo(45, 6);
+			});
+
+			it('{x1: 2, y1: -2, x2: 0, y2: 0} angle should be 135', function(){
+				// arrange
+				var line = new Line ({x1: 2, y1: -2, x2: 0, y2: 0});
+				// assert
+				expect (line.directionAngle).toBeCloseTo(135, 6);
 			});
 		});
 
@@ -92,7 +191,7 @@ define (function (require, exports, module) {
 				expect(line.y1).toBeCloseTo(-0.732051, 6);
 				expect(line.x2).toBeCloseTo(-5.464102, 6);
 				expect(line.y2).toBeCloseTo(-1.464102, 6);
-				expect(line.directionAngle).toBe(195);
+				expect(line.directionAngle).toBeCloseTo(195, 6);
 			});
 		});
 	});

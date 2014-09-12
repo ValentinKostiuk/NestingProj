@@ -83,8 +83,32 @@ define (function (require, exports, module) {
 			},
 			directionAngle: {
 				get: function () {
-					var radians = Math.atan2(this.y2 - this.y1, this.x2 - this.x1);
-					return radians * 180 / Math.PI;
+					var xDelta = this.x2 - this.x1,
+						yDelta = this.y2 - this.y1,
+						angle;
+					if (xDelta > 0 && yDelta > 0) {
+						angle = Math.atan (yDelta / xDelta) * 180 / Math.PI;
+					} else if (xDelta < 0 && yDelta > 0) {
+						angle = 180 - Math.atan (yDelta / Math.abs (xDelta)) * 180 / Math.PI;
+					} else if (xDelta < 0 && yDelta < 0) {
+						angle = 180 + Math.atan (yDelta / xDelta) * 180 / Math.PI;
+					} else if (xDelta > 0 && yDelta < 0) {
+						angle = 360 - Math.atan (Math.abs (yDelta) / xDelta) * 180 / Math.PI;
+					} else if (xDelta === 0) {
+						if (yDelta > 0) {
+							angle = 90;
+						} else if(yDelta < 0) {
+							angle = 270;
+						}
+					} else if (yDelta === 0) {
+						if (xDelta > 0) {
+							angle = 0;
+						} else if (xDelta < 0) {
+							angle = 180;
+						}
+					}
+
+					return angle;
 				},
 				configurable: false,
 				enumerable: true
